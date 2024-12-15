@@ -32,7 +32,7 @@ jobs:
       # Copy file to the remote machine
       - name: Copy file to remote server
         run: |
-          scp -o StrictHostKeyChecking=no --exclude=".git" --exclude=".github" -r . root@${{ secrets.REMOTE_HOST }}:/tmp/
+          scp -o StrictHostKeyChecking=no -r --exclude=".git" --exclude=".github" . root@${{ secrets.REMOTE_HOST }}:/tmp/
         env:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
