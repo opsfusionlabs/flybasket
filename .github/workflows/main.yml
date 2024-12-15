@@ -1,0 +1,38 @@
+name: Copy File via SSH
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  copy-file:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Set up SSH keys
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      # Add SSH host key to known_hosts to avoid prompt
+      - name: Add SSH host to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
+        env:
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+
+      # Copy file to the remote machine
+      - name: Copy file to remote server
+        run: |
+          scp -o StrictHostKeyChecking=no -r . username@${{ secrets.REMOTE_HOST }}:/path/to/remote/directory/
+        env:
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
