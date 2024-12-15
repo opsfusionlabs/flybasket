@@ -32,7 +32,7 @@ jobs:
       # Copy file to the remote machine
       - name: Copy file to remote server
         run: |
-          scp -o StrictHostKeyChecking=no -r . root@${{ secrets.REMOTE_HOST }}:/tmp/
+          scp -o StrictHostKeyChecking=no -r . root@${{ secrets.REMOTE_HOST }}:/var/www/html/adminflybasket/
         env:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
